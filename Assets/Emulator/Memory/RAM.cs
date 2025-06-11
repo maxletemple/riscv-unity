@@ -9,16 +9,16 @@ public class RAM : AddressableMemory
         if (size > MAX_RAM_SIZE)
             throw new ArgumentException($"RAM size cannot exceed {MAX_RAM_SIZE} bytes.");
     }
-    
+
 
     public void LoadFromFile(string filePath)
     {
         if (!System.IO.File.Exists(filePath))
-            throw new System.IO.FileNotFoundException("ROM file not found.", filePath);
+            throw new System.IO.FileNotFoundException("RAM file not found.", filePath);
 
         byte[] fileData = System.IO.File.ReadAllBytes(filePath);
         if (fileData.Length > memory.Length)
-            throw new ArgumentException("ROM file is larger than allocated memory size.");
+            throw new ArgumentException("RAM file is larger than allocated memory size.");
 
         Array.Copy(fileData, memory, fileData.Length);
     }

@@ -1,3 +1,5 @@
+using UnityEngine;
+
 public abstract class AddressableMemory : IMemoryType
 {
     protected byte[] memory;
@@ -11,20 +13,21 @@ public abstract class AddressableMemory : IMemoryType
 
     public virtual void Write64(Reg64 address, Reg64 value)
     {
+        ulong val = (ulong)value;
         for (int i = 0; i < 8; i++)
         {
-            memory[(long)address + i] = (byte)((value >> (i * 8)) & 0xFF);
+            memory[(long)address + i] = (byte)((val >> (i * 8)));
         }
     }
 
     public virtual Reg64 Read64(Reg64 address)
     {
-        Reg64 value = 0;
+        ulong value = 0;
         for (int i = 0; i < 8; i++)
         {
-            value |= (Reg64)memory[(long)address + i] << (i * 8);
+            value |= (ulong)memory[(long)address + i] << (i * 8);
         }
-        return value;
+        return (Reg64)value;
     }
 
     public virtual void Write32(Reg64 address, uint value)

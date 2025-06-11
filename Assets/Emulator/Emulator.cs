@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.IO;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
@@ -6,25 +7,29 @@ public class Emulator : MonoBehaviour
 {
     public Console console;
     public Reg64 RAMSize = 1024 * 1024; // 1 MB
-    public Reg64 RAMStartAddress = 0x1000; // Start address for RAM
+    public Reg64 RAMStartAddress = 0x80000000; // Start address for RAM
     public Reg64 UARTStartAddress = 0x10000000; // Start address for UART
     public Reg64 UARTSize = 0x1000; // Size of UART memory region
-    
+
+    string bootFilePath = "boot.bin";
+    string ramFilePath = "program.bin";
+
     public int cyclesPerUpdate = 10000;
     private MemoryBus memoryBus;
     private Cpu cpu;
     private bool reportDone = false;
+    double lastTime = 0;
     void Start()
     {
         memoryBus = new MemoryBus();
 
         RAM ram = new RAM(RAMStartAddress, RAMSize);
-        ram.LoadFromFile(Application.dataPath + "/main.bin");
+        ram.LoadFromFile(Application.streamingAssetsPath + "/" + ramFilePath);
         memoryBus.AddRegion(ram, RAMStartAddress, RAMStartAddress + RAMSize);
 
-        ROM rom = new ROM(0, 1024);
-        rom.LoadFromFile(Application.dataPath + "/boot.bin");
-        memoryBus.AddRegion(rom, 0x0000, 0x0400);
+        RAM bios = new RAM(0, 0x10000000);
+        bios.LoadFromFile(Application.streamingAssetsPath + "/" + bootFilePath);
+        memoryBus.AddRegion(bios, 0x0000, 0x10000000);
 
         UART uart = new UART(console.WriteChar);
         memoryBus.AddRegion(uart, UARTStartAddress, UARTStartAddress + UARTSize);
@@ -34,7 +39,6 @@ public class Emulator : MonoBehaviour
 
     void FixedUpdate()
     {
-        var startTime = (double) Stopwatch.GetTimestamp() / Stopwatch.Frequency;
         for (int i = 0; i < cyclesPerUpdate; i++)
         {
             // Simulate a CPU cycle
@@ -42,9 +46,9 @@ public class Emulator : MonoBehaviour
         }
         var endTime = (double) Stopwatch.GetTimestamp() / Stopwatch.Frequency;
 
-        var elapsedTime = endTime - startTime;
+        var elapsedTime = endTime - lastTime;
         var frequency = cyclesPerUpdate / elapsedTime;
-        if ((int)Time.realtimeSinceStartup % 10 == 0)
+        if ((int)Time.realtimeSinceStartup % 3 == 0)
         {
             if (!reportDone)
             {
@@ -56,6 +60,7 @@ public class Emulator : MonoBehaviour
         {
             reportDone = false;
         }
+        lastTime = (double) Stopwatch.GetTimestamp() / Stopwatch.Frequency;
         
     }
 }

@@ -31,7 +31,7 @@ public struct Reg64
 
     public ulong getUnsigned(int bits)
     {
-        return value & ((1UL << bits) - 1);
+        return value & ~(1UL << (bits - 1));
     }
 
     public override string ToString()

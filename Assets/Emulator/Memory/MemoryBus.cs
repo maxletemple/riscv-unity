@@ -27,7 +27,7 @@ public class MemoryBus
                 return;
             }
         }
-        throw new ArgumentOutOfRangeException("Address is out of bounds for any memory region.");
+        throw new ArgumentOutOfRangeException("Address is out of bounds for any memory region.: " + address);
     }
 
     public Reg64 Read64(Reg64 address)
@@ -39,7 +39,7 @@ public class MemoryBus
                 return region.region.Read64(address - region.startAdress);
             }
         }
-        throw new ArgumentOutOfRangeException("Address is out of bounds for any memory region.");
+        throw new ArgumentOutOfRangeException("Address is out of bounds for any memory region.: " + address);
     }
 
     public void Write32(Reg64 address, uint value)
@@ -52,7 +52,7 @@ public class MemoryBus
                 return;
             }
         }
-        throw new ArgumentOutOfRangeException("Address is out of bounds for any memory region.");
+        throw new ArgumentOutOfRangeException("Address is out of bounds for any memory region.: " + address);
     }
 
     public uint Read32(Reg64 address)
@@ -64,7 +64,7 @@ public class MemoryBus
                 return region.region.Read32(address - region.startAdress);
             }
         }
-        throw new ArgumentOutOfRangeException("Address is out of bounds for any memory region.");
+        throw new ArgumentOutOfRangeException("Address is out of bounds for any memory region.: " + address);
     }
 
     public void Write16(Reg64 address, ushort value)
@@ -77,7 +77,7 @@ public class MemoryBus
                 return;
             }
         }
-        throw new ArgumentOutOfRangeException("Address is out of bounds for any memory region.");
+        throw new ArgumentOutOfRangeException("Address is out of bounds for any memory region.: " + address);
     }
 
     public ushort Read16(Reg64 address)
@@ -89,7 +89,7 @@ public class MemoryBus
                 return region.region.Read16(address - region.startAdress);
             }
         }
-        throw new ArgumentOutOfRangeException("Address is out of bounds for any memory region.");
+        throw new ArgumentOutOfRangeException("Address is out of bounds for any memory region.: " + address);
     }
 
     public void Write8(Reg64 address, byte value)
@@ -102,7 +102,7 @@ public class MemoryBus
                 return;
             }
         }
-        throw new ArgumentOutOfRangeException("Address is out of bounds for any memory region.");
+        throw new ArgumentOutOfRangeException("Address is out of bounds for any memory region.: " + address);
     }
 
     public byte Read8(Reg64 address)
@@ -114,7 +114,7 @@ public class MemoryBus
                 return region.region.Read8(address - region.startAdress);
             }
         }
-        throw new ArgumentOutOfRangeException("Address is out of bounds for any memory region.");
+        throw new ArgumentOutOfRangeException("Address is out of bounds for any memory region.: " + address);
     }
 
     // public void LoadFromFile(string filePath, int startAddress)
